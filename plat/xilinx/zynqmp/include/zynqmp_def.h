@@ -31,14 +31,20 @@
  * ZYNQMP memory map related constants
  ******************************************************************************/
 /* Aggregate of all devices in the first GB */
-#define DEVICE0_BASE		U(0xFF000000)
-#define DEVICE0_SIZE		U(0x00E00000)
+/* XMPU support ZCU: extend DEVICE0 do cover XMPU registers 
+ * FIXME: does this generate problems?
+ */
+#define DEVICE0_BASE		U(0xFD000000)	//was 0xFF000000
+#define DEVICE0_SIZE		U(0x02E00000)	//was 0x00E00000
 #define DEVICE1_BASE		U(0xF9000000)
 #define DEVICE1_SIZE		U(0x00800000)
 
 /* For cpu reset APU space here too 0xFE5F1000 CRF_APB*/
 #define CRF_APB_BASE		U(0xFD1A0000)
-#define CRF_APB_SIZE		U(0x00600000)
+/* QoS support ZCU 102: extend do cover FPD_GPV and LPD_GPV
+ * FIXME: does this generate problems with the IOMMU?
+ */
+#define CRF_APB_SIZE		U(0x02000000)
 #define CRF_APB_CLK_BASE	U(0xFD1A0020)
 
 /* CRF registers and bitfields */
@@ -140,7 +146,7 @@
 /*******************************************************************************
  * UART related constants
  ******************************************************************************/
-#define ZYNQMP_UART0_BASE		U(0xFF000000)
+#define ZYNQMP_UART0_BASE		U(0xFF010000) // Should be 0xFF000000. to change ...
 #define ZYNQMP_UART1_BASE		U(0xFF010000)
 
 #if ZYNQMP_CONSOLE_IS(cadence) || ZYNQMP_CONSOLE_IS(dcc)

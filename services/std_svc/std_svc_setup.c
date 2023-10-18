@@ -13,6 +13,7 @@
 #include <lib/pmf/pmf.h>
 #include <lib/psci/psci.h>
 #include <lib/runtime_instr.h>
+#include <lib/mmio.h>
 #include <services/drtm_svc.h>
 #include <services/pci_svc.h>
 #include <services/rmmd_svc.h>
@@ -219,6 +220,17 @@ static uintptr_t std_svc_smc_handler(uint32_t smc_fid,
 	case ARM_STD_SVC_VERSION:
 		/* Return the version of current implementation */
 		SMC_RET2(handle, STD_SVC_VERSION_MAJOR, STD_SVC_VERSION_MINOR);
+	
+	case ARM_STD_SVC_READ_REG:
+		//NOTICE(" X1: 0x%lx\n", x1);
+		SMC_RET1(handle, mmio_read_32(x1));
+
+	case ARM_STD_SVC_WRITE_REG:
+		//NOTICE("BEFORE X1: 0x%lx X2: 0x%lx\n", x1, x2);
+		mmio_write_32(x1, x2);
+		//NOTICE("AFTER  X1: 0x%lx X2: 0x%lx\n", x1, x2);
+		SMC_RET1(handle, mmio_read_32(x1));
+
 
 	default:
 		VERBOSE("Unimplemented Standard Service Call: 0x%x \n", smc_fid);
